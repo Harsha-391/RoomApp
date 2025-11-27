@@ -62,6 +62,7 @@ export default function App() {
   };
 
   // 2. Send to Backend
+// 2. Send to Backend
   const generateRoom = async () => {
     if (!image) {
       Alert.alert("Missing Image", "Please pick an image first.");
@@ -81,7 +82,8 @@ export default function App() {
 
       console.log("Sending to AI...");
 
-      const response = await fetch(API_URL, {
+      // --- FIX IS HERE: Added /generate-room ---
+      const response = await fetch(`${API_URL}/generate-room`, {
         method: 'POST',
         body: formData,
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -89,12 +91,12 @@ export default function App() {
 
       // BETTER ERROR HANDLING
       if (!response.ok) {
-        // Try to read the error text from the server
         const errorText = await response.text(); 
         console.log("Server Error:", errorText);
         throw new Error(`Server said: ${response.status} ${errorText}`);
       }
 
+      // ... rest of your code handles the blob ...
       const blob = await response.blob();
       const reader = new FileReader();
       reader.readAsDataURL(blob);
